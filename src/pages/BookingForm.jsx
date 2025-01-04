@@ -20,12 +20,13 @@ export default function BookingForm({ selectedSlot, selectedDate, onBookingCompl
   const [isOpen, setIsOpen] = useState(true); 
   const [dialogMessage, setDialogMessage] = useState(""); 
   const [showDialog, setShowDialog] = useState(false); 
+  const [email, setEmail] = useState(""); // Added state for email
 
   useEffect(() => {
     // Safely access localStorage in the browser
     if (typeof window !== "undefined") {
       const storedEmail = localStorage.getItem("email");
-      setEmail(storedEmail);
+      setEmail(storedEmail || "");
     }
   }, []);
   useEffect(() => {
