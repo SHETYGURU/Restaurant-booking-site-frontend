@@ -1,6 +1,6 @@
 import React, { useState } from 'react'; 
 import { useRouter } from 'next/router'; 
-import './customStyles.css';
+// import './customStyles.css';
 import Calendar from '@/pages/Calendar';
 
 const Login = () => {
