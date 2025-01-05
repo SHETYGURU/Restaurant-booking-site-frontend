@@ -21,8 +21,6 @@ export default function BookingForm({ selectedSlot, selectedDate, onBookingCompl
   const [dialogMessage, setDialogMessage] = useState(""); 
   const [showDialog, setShowDialog] = useState(false); 
   const [email, setEmail] = useState(""); // Added state for email
-const [fieldErrors, setFieldErrors] = useState({});
-const [focusedField, setFocusedField] = useState(null);
 
   useEffect(() => {
     // Safely access localStorage in the browser
@@ -73,36 +71,10 @@ const [focusedField, setFocusedField] = useState(null);
     };
   }, [isOpen]);
 
-  const validateField = (name, value) => {
-  let error = "";
-  if (!value) {
-    error = "This field is required.";
-  } else if (name === "contact" && !/^\d{10}$/.test(value)) {
-    error = "Enter a valid 10-digit phone number.";
-  } else if (name === "guests" && (value < 1 || value > 6)) {
-    error = "Guests must be between 1 and 6.";
-  }
-  return error;
-};
-  
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  const error = validateField(name, value);
-
-  setFormData((prev) => ({ ...prev, [name]: value }));
-  if (focusedField === name) {
-    setFieldErrors((prev) => ({ ...prev, [name]: error }));
-  }
-};
-
-const handleFocus = (name) => setFocusedField(name);
-
-const handleBlur = (name) => {
-  const error = validateField(name, formData[name]);
-  setFieldErrors((prev) => ({ ...prev, [name]: error }));
-  setFocusedField(null);
-};
-
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleTableSelection = (table) => {
     if (!tableStatus[table]) {
@@ -113,7 +85,6 @@ const handleBlur = (name) => {
       setTimeout(() => setShowDialog(false), 1500);
     }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -196,74 +167,38 @@ setTableStatus((prev) => ({
           <div className="mb-4 flex space-x-4">
             <div className="flex-1">
               <label className="block text-sm font-medium">Name</label>
-             <input
-    type="text"
-    name="name"
-    required
-    value={formData.name}
-    onChange={handleChange}
-    onFocus={() => handleFocus("name")}
-    onBlur={() => handleBlur("name")}
-    className="w-full p-2 border rounded focus:outline-none focus:border-blue-500 transition-all duration-300"
-  />
-  {fieldErrors.name && focusedField === "name" && (
-    <span className="text-red-500 text-sm absolute top-full mt-1">
-      {fieldErrors.name}
-    </span>
-  )}
-  {!fieldErrors.name && formData.name && (
-    <span className="text-green-500 text-sm absolute top-full mt-1">
-      ✔
-    </span>
-  )}
+              <input
+                type="text"
+                name="name"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:outline-none focus:border-blue-500 transition-all duration-300"
+              />
             </div>
             <div className="flex-1">
               <label className="block text-sm font-medium">Contact</label>
-             <input
-    type="text"
-    name="contact"
-    required
-    value={formData.contact}
-    onChange={handleChange}
-    onFocus={() => handleFocus("contact")}
-    onBlur={() => handleBlur("contact")}
-    className="w-full p-2 border rounded focus:outline-none focus:border-blue-500 transition-all duration-300"
-  />
-  {fieldErrors.contact && focusedField === "contact" && (
-    <span className="text-red-500 text-sm absolute top-full mt-1">
-      {fieldErrors.contact}
-    </span>
-  )}
-  {!fieldErrors.contact && formData.contact && (
-    <span className="text-green-500 text-sm absolute top-full mt-1">
-      ✔
-    </span>
-  )}
+              <input
+                type="text"
+                name="contact"
+                required
+                value={formData.contact}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:outline-none focus:border-blue-500 transition-all duration-300"
+              />
             </div>
           </div>
           <div className="mb-4 flex space-x-4">
             <div className="flex-1">
               <label className="block text-sm font-medium">Number of Guests</label>
               <input
-    type="number"
-    name="guests"
-    required
-    value={formData.guests}
-    onChange={handleChange}
-    onFocus={() => handleFocus("guests")}
-    onBlur={() => handleBlur("guests")}
-    className="w-full p-2 border rounded focus:outline-none focus:border-blue-500 transition-all duration-300"
-  />
-  {fieldErrors.guests && focusedField === "guests" && (
-    <span className="text-red-500 text-sm absolute top-full mt-1">
-      {fieldErrors.guests}
-    </span>
-  )}
-  {!fieldErrors.guests && formData.guests && (
-    <span className="text-green-500 text-sm absolute top-full mt-1">
-      ✔
-    </span>
-  )}
+                type="number"
+                name="guests"
+                required
+                value={formData.guests}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:outline-none focus:border-blue-500 transition-all duration-300"
+              />
             </div>
             <div className="flex-1">
               <label className="block text-sm font-medium">Date</label>
